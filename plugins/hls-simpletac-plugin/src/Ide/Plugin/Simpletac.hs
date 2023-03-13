@@ -7,16 +7,20 @@ module Ide.Plugin.Simpletac
 
 import qualified Data.Aeson as A
 import Data.Text (Text)
-import Development.IDE (IdeState, Rules)
-import Development.IDE.Types.Logger (Recorder, WithPriority, Pretty (..), logWith, Priority (..))
+import Development.IDE (IdeState, Rules, RuleResult, define)
+import qualified Development.IDE.Core.Shake as Shake
+import Development.IDE.Types.Logger (Recorder, WithPriority, Pretty (..), cmapWithPrio, logWith, Priority (..))
 import Ide.Types (PluginDescriptor (..), PluginId, defaultPluginDescriptor,
   PluginCommand (..), CommandFunction, mkPluginHandler, PluginHandlers, PluginMethodHandler)
 import Language.LSP.Types (Method (..), SMethod (..))
 import GHC.Stack (HasCallStack)
 import Control.Monad.IO.Class (MonadIO)
+import GHC.Generics (Generic)
+import Data.Hashable (Hashable)
+import Control.DeepSeq (NFData)
 
 data Log =
-    LogSomething
+    LogShake Shake.Log
   | LogMessage !Text
   deriving stock (Show)
 
@@ -27,7 +31,7 @@ logDebug recorder msg = logWith recorder Info (LogMessage msg)
 
 instance Pretty Log where
   pretty = \case
-    LogSomething -> "Something"
+    LogShake l -> pretty l
     LogMessage t -> pretty t
 
 descriptor :: LogRec -> PluginId -> PluginDescriptor IdeState
@@ -37,8 +41,22 @@ descriptor recorder plId = (defaultPluginDescriptor plId)
   , pluginHandlers = handlers recorder
   }
 
+data StubQuery = StubQuery deriving stock (Eq, Ord, Show, Generic)
+instance Hashable StubQuery
+instance NFData StubQuery
+
+data StubResult = StubResult deriving stock (Eq, Ord, Show, Generic)
+instance Hashable StubResult
+instance NFData StubResult
+
+type instance RuleResult StubQuery = StubResult
+
 rules :: LogRec -> Rules ()
-rules recorder = logDebug recorder "TODO Setting up rules"
+rules recorder = do
+    logDebug recorder "TODO Setting up rules"
+    define (cmapWithPrio LogShake recorder) $ \StubQuery _nfp -> do
+        logDebug recorder "TODO Handling StubQuery"
+        pure ([], Just StubResult)
 
 commands :: LogRec -> [PluginCommand IdeState]
 commands recorder =

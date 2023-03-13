@@ -1,5 +1,4 @@
-# resolver: nightly-2022-08-15
-resolver: lts-20.14
+resolver: nightly-2022-08-15
 
 packages:
 - .
@@ -37,7 +36,6 @@ packages:
 - ./plugins/hls-explicit-fixity-plugin
 - ./plugins/hls-refactor-plugin
 - ./plugins/hls-explicit-record-fields-plugin
-- ./plugins/hls-simpletac-plugin
 
 extra-deps:
 # needed for tests of hls-cabal-fmt-plugin

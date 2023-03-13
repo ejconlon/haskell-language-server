@@ -33,6 +33,8 @@ library
     , hls-plugin-api  >=1.6 && <2
     , lsp-types       >=1.6 && <2
     , text            >=1.2 && <2
+    , hashable        >=1.4 && <2
+    , deepseq         >=1.4 && <2
 
   default-language:   Haskell2010
   default-extensions:
@@ -56,5 +58,6 @@ library
     PatternSynonyms
     ScopedTypeVariables
     TypeApplications
+    TypeFamilies
     TypeOperators
     ViewPatterns

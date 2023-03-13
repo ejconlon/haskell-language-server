@@ -1,0 +1,58 @@
+cabal-version:      2.4
+category:           Development
+name:               hls-simpletac-plugin
+version:            1.9.1.0
+synopsis:           Simple tactics plugin for Haskell Language Server
+description:
+  Please see the README on GitHub at <https://github.com/haskell/haskell-language-server#readme>
+author:             Eric Conlon
+maintainer:         ejconlon@gmail.com
+license:            Apache-2.0
+license-file:       LICENSE
+build-type:         Simple
+extra-source-files:
+  README.md
+
+source-repository head
+    type:     git
+    location: https://github.com/haskell/haskell-language-server.git
+
+
+library
+  hs-source-dirs: src
+  exposed-modules:
+    Ide.Plugin.Simpletac
+
+  ghc-options:
+    -Wall -Wno-name-shadowing -Wredundant-constraints
+    -Wno-unticked-promoted-constructors -Werror
+
+  build-depends:
+    , base                  >=4.12    && <5
+    , ghcide                ^>= 1.9
+    , lsp
+
+  default-language:   Haskell2010
+  default-extensions:
+    DataKinds
+    DeriveAnyClass
+    DeriveDataTypeable
+    DeriveFoldable
+    DeriveFunctor
+    DeriveGeneric
+    DeriveTraversable
+    DerivingStrategies
+    DerivingVia
+    FlexibleContexts
+    FlexibleInstances
+    GADTs
+    GeneralizedNewtypeDeriving
+    LambdaCase
+    MultiParamTypeClasses
+    NumDecimals
+    OverloadedLabels
+    PatternSynonyms
+    ScopedTypeVariables
+    TypeApplications
+    TypeOperators
+    ViewPatterns

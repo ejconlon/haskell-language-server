@@ -7,7 +7,7 @@ module Ide.Plugin.Simpletac
 
 import qualified Data.Aeson as A
 import Data.Text (Text)
-import Development.IDE (IdeState, Rules, RuleResult, define)
+import Development.IDE (IdeState, Rules, RuleResult, define, List (..))
 import qualified Development.IDE.Core.Shake as Shake
 import Development.IDE.Types.Logger (Recorder, WithPriority, Pretty (..), cmapWithPrio, logWith, Priority (..))
 import Ide.Types (PluginDescriptor (..), PluginId, defaultPluginDescriptor,
@@ -20,7 +20,7 @@ import Data.Hashable (Hashable)
 import Control.DeepSeq (NFData)
 
 data Log =
-    LogShake Shake.Log
+    LogShake !Shake.Log
   | LogMessage !Text
   deriving stock (Show)
 
@@ -69,9 +69,17 @@ doSomethingCmd recorder _state _ = do
     pure (Right A.Null)
 
 handlers :: LogRec -> PluginHandlers IdeState
-handlers recorder = mkPluginHandler STextDocumentHover (hoverProvider recorder)
+handlers recorder = mconcat
+  [ mkPluginHandler STextDocumentHover (hoverProvider recorder)
+  , mkPluginHandler STextDocumentCodeAction (actionProvider recorder)
+  ]
 
 hoverProvider :: LogRec -> PluginMethodHandler IdeState TextDocumentHover
 hoverProvider recorder _state _ _params = do
     logDebug recorder "TODO Providing hover"
     pure (Right Nothing)
+
+actionProvider :: LogRec -> PluginMethodHandler IdeState TextDocumentCodeAction
+actionProvider recorder _state _ _params = do
+    logDebug recorder "TODO Providing action"
+    pure (Right (List []))

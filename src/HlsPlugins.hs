@@ -56,6 +56,10 @@ import qualified Ide.Plugin.Retrie                 as Retrie
 import qualified Ide.Plugin.Tactic                 as Tactic
 #endif
 
+#if hls_simpletac
+import qualified Ide.Plugin.Simpletac              as Simpletac
+#endif
+
 #if hls_hlint
 import qualified Ide.Plugin.Hlint                  as Hlint
 #endif
@@ -161,6 +165,9 @@ idePlugins recorder = pluginDescToIdePlugins allPlugins
 #endif
 #if hls_tactic
       let pId = "tactics" in Tactic.descriptor (pluginRecorder pId) pId:
+#endif
+#if hls_simpletac
+      let pId = "simpletac" in Simpletac.descriptor (pluginRecorder pId) pId:
 #endif
 #if hls_ormolu
       Ormolu.descriptor   "ormolu" :

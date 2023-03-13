@@ -114,6 +114,11 @@ flag tactic
   default:     True
   manual:      True
 
+flag simpletac
+  description: Enable simpletac plugin
+  default:     True
+  manual:      True
+
 flag hlint
   description: Enable hlint plugin
   default:     True
@@ -266,6 +271,11 @@ common tactic
     build-depends: hls-tactics-plugin ^>= 1.8
     cpp-options: -Dhls_tactic
 
+common simpletac
+  if flag(simpletac)
+    build-depends: hls-simpletac-plugin ^>= 0.1
+    cpp-options: -Dhls_simpletac
+
 common hlint
   if flag(hlint)
     build-depends: hls-hlint-plugin ^>= 1.1
@@ -329,7 +339,7 @@ common explicitFields
 -- formatters
 
 common floskell
-  if flag(floskell) 
+  if flag(floskell)
     build-depends: hls-floskell-plugin ^>= 1.0
     cpp-options: -Dhls_floskell
 
@@ -339,12 +349,12 @@ common fourmolu
     cpp-options: -Dhls_fourmolu
 
 common ormolu
-  if flag(ormolu) 
+  if flag(ormolu)
     build-depends: hls-ormolu-plugin ^>= 1.0
     cpp-options: -Dhls_ormolu
 
 common stylishHaskell
-  if flag(stylishHaskell) 
+  if flag(stylishHaskell)
     build-depends: hls-stylish-haskell-plugin ^>= 1.0
     cpp-options: -Dhls_stylishHaskell
 
@@ -387,6 +397,7 @@ library
                   , ormolu
                   , stylishHaskell
                   , refactor
+                  , simpletac
 
   exposed-modules:
     Ide.Arguments

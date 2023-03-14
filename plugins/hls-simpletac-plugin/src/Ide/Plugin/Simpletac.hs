@@ -1,9 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Ide.Plugin.Simpletac
-  ( descriptor
-  , Log (..)
-  ) where
+module Ide.Plugin.Simpletac where
+--   ( descriptor
+--   , Log (..)
+--   ) where
 
 import qualified Data.Aeson as A
 import Data.Text (Text)
@@ -18,6 +18,7 @@ import Control.Monad.IO.Class (MonadIO)
 import GHC.Generics (Generic)
 import Data.Hashable (Hashable)
 import Control.DeepSeq (NFData)
+import Development.IDE.GHC.Compat (HsExpr, GhcPs, Pat)
 
 data Log =
     LogShake !Shake.Log
@@ -83,3 +84,20 @@ actionProvider :: LogRec -> PluginMethodHandler IdeState TextDocumentCodeAction
 actionProvider recorder _state _ _params = do
     logDebug recorder "TODO Providing action"
     pure (Right (List []))
+
+-- data Simpletac
+--   = SimpletacDestruct
+--   deriving stock (Eq, Ord, Show, Enum, Bounded, Generic)
+
+-- simpletacTitle :: Simpletac -> Text -> Text
+-- simpletacTitle s v = "Simpletac: " <> title where
+--   title = case s of
+--     SimpletacDestruct -> "Case split on " <> v
+
+data Simpletac = SimpletacDestruct !Text !Int !Int -- var line col
+  deriving stock (Eq, Ord, Show, Generic)
+
+-- data AgdaMatch = AgdaMatch
+--   { amPats :: [Pat GhcPs]
+--   , amBody :: HsExpr GhcPs
+--   }

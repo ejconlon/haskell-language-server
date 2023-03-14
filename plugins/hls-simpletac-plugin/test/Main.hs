@@ -5,30 +5,24 @@ module Main
   ) where
 
 import Data.Text (Text)
-import Ide.Plugin.Simpletac (Simpletac (..))
-import Test.Tasty (TestTree, defaultMain, testGroup)
-import Test.Tasty.HUnit (testCase)
+import Ide.Plugin.Simpletac (descriptor, Log)
+import Test.Tasty (TestName, TestTree, defaultMain, testGroup)
+import Test.Hls (goldenWithHaskellDoc, PluginTestDescriptor, mkPluginTestDescriptor, Session, TextDocumentIdentifier)
 
 main :: IO ()
 main = defaultMain tests
 
 tests :: TestTree
 tests = testGroup "simpletac"
-  [ destructTest "t" 6 10 "DestructInt"
+  [ destructTest "single constructor" "t" 6 10 "DestructInt"
   ]
 
-destructTest :: Text -> Int -> Int -> FilePath -> TestTree
-destructTest var line col = goldenTest (SimpletacDestruct var line col)
+destructTest :: TestName -> Text -> Int -> Int -> FilePath -> TestTree
+destructTest title _var _line _col input = goldenTest ("Destruct: " <> title) input $ \_tdi -> do
+  pure () -- TODO apply tactic
 
-goldenTest :: Simpletac -> FilePath -> TestTree
-goldenTest _tac input = testCase (input <> " (golden)") $ do
-  -- doc <- openDoc (input <.> "hs") "haskell"
-  -- traverse_ (invokeTactic doc) invocations
-  -- edited <- documentContents doc
-  -- let expected_name = input <.> "expected" <.> "hs"
-  -- -- Write golden tests if they don't already exist
-  -- liftIO $ (doesFileExist expected_name >>=) $ flip unless $ do
-  --     T.writeFile expected_name edited
-  -- expected <- liftIO $ T.readFile expected_name
-  -- liftIO $ edited `eq` expected
-  pure () -- TODO
+goldenTest :: TestName -> FilePath -> (TextDocumentIdentifier -> Session ()) -> TestTree
+goldenTest title input = goldenWithHaskellDoc plugin title "test/golden" input "expected" "hs"
+
+plugin :: PluginTestDescriptor Log
+plugin = mkPluginTestDescriptor descriptor "simpletac"

@@ -78,13 +78,13 @@ test-suite tests
     , base
     -- , containers
     -- , deepseq
-    -- , directory
-    -- , filepath
+    , directory
+    , filepath
     -- , ghc
     -- , ghcide
     -- , hls-plugin-api
     , hls-simpletac-plugin
-    -- , hls-test-utils      ^>=1.5
+    , hls-test-utils
     -- , hspec
     -- , hspec-expectations
     -- , lens
